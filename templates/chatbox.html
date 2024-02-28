@@ -1,0 +1,32 @@
+<!-- myapp/templates/chat_box.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Example</title>
+</head>
+<body>
+    <h1>WebSocket Example</h1>
+    <input type="text" id="messageInput" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+    <ul id="messageList"></ul>
+
+    <script>
+        const socket = new WebSocket("ws://" + window.location.host + "/ws/127.0.0.1:8000/");
+
+        socket.onmessage = function(event) {
+            const messageList = document.getElementById("messageList");
+            const message = document.createElement("li");
+            message.appendChild(document.createTextNode(event.data));
+            messageList.appendChild(message);
+        };
+
+        function sendMessage() {
+            const messageInput = document.getElementById("messageInput");
+            const message = messageInput.value;
+            socket.send(JSON.stringify({ message }));
+            messageInput.value = "";
+        }
+    </script>
+</body>
+</html>
